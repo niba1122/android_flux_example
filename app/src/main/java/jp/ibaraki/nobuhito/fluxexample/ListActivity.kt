@@ -36,10 +36,9 @@ class ListActivity : AppCompatActivity() {
 
         }
 
-        viewModel.errorSnackbar.observe(this, Observer {
-            it ?: return@Observer
+        viewModel.errorSnackbarBlock = {
             Snackbar.make(window.decorView, it.message ?: "error", Snackbar.LENGTH_SHORT).show()
-        })
+        }
 
         viewModel.listItems.observe(this, Observer {
             it ?: return@Observer
@@ -57,8 +56,8 @@ class ListActivity : AppCompatActivity() {
 
 
 class EndlessScrollListener(private val visibleThreshold: Int,
-                             private val layoutManager: LinearLayoutManager,
-                             private val onScrolled: () -> Unit) : RecyclerView.OnScrollListener() {
+                            private val layoutManager: LinearLayoutManager,
+                            private val onScrolled: () -> Unit) : RecyclerView.OnScrollListener() {
 
     override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
         super.onScrolled(recyclerView, dx, dy)

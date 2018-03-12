@@ -34,6 +34,8 @@ class ListReducer(action: Observable<ListActionType>) : DisposableMapper() {
 
         action.ofType(ListActionType.Error::class.java)
                 .subscribe {
+                    mIsInitialLoading.value = false
+                    mIsNextLoading.value = false
                     mError.onNext(it.error)
                 }.let { disposables.add(it) }
     }

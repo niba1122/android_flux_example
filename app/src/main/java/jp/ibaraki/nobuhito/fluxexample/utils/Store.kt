@@ -2,13 +2,15 @@ package jp.ibaraki.nobuhito.fluxexample.utils
 
 
 import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 
 abstract class Store<AT, out AC, R, out G> where AC : DisposableMapper, R : DisposableMapper, G : DisposableMapper {
     private val dispatcher: PublishSubject<AT> = PublishSubject.create()
     private val reducer: R by lazy {
-        createReducer(dispatcher)
+        createReducer(dispatcher.observeOn(Schedulers.computation()))
     }
     val actionCreator: AC by lazy {
         createActionCreator({

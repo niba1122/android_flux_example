@@ -14,7 +14,7 @@ class ListViewModel : ViewModel() {
 
     val listItems: MutableLiveData<List<ListItemType>> = MutableLiveData()
     val isShownPageLoading: MutableLiveData<Boolean> = MutableLiveData()
-    val errorSnackbar: MutableLiveData<Throwable> = MutableLiveData()
+    var errorSnackbarBlock: (Throwable) -> Unit = {}
 
     init {
         store.getter.listItems
@@ -33,7 +33,7 @@ class ListViewModel : ViewModel() {
         store.getter.errorSnackbar
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
-                    errorSnackbar.value = it
+                    errorSnackbarBlock(it)
                 }, {}).let { disposables.add(it) }
     }
 
